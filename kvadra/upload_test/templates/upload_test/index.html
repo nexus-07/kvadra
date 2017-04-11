@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+</head>
+<body>
+    <button type="button" onclick="get_text()">get text</button>
+    <div id="results"></div>
+</body>
+</html>
+
+
+<script >
+    function get_text() {
+        $('#results').html('');
+        console.log('get_text');
+        $.ajax({
+            url : "/get_text_list/",
+            type : "POST",
+            data : {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success : function(res) {
+                $('#results').html('');
+                var list = [];
+                res.forEach(function(obj) {
+                    list.push('<li>' + obj.text + '</li>');
+                });
+                $('#results').html('<ul>' + list.join('') + '</ul>');
+            },
+            error : function(err) {
+                $('#results').html(err.responseJSON.message);
+            }
+        });
+    }
+</script>

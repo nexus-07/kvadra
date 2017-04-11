@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+</head>
+<body>
+    <textarea id="post-text"></textarea>
+    <button type="button" onclick="text_save()">save text</button>
+    <div id="results"></div>
+</body>
+</html>
+
+
+<script >
+    function text_save() {
+        $('#results').html('');
+        console.log('text_save');
+        $.ajax({
+            url : "/text_save/",
+            type : "POST",
+            data : {
+                text : $('#post-text').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+
+            success : function(json) {
+                $('#post-text').val('');
+                console.log(json.result);
+            },
+
+            error : function(err) {
+                $('#results').html(err.responseJSON.message);
+            }
+        });
+    }
+</script>
